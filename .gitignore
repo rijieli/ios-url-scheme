@@ -6,6 +6,11 @@ __pycache__/
 # C extensions
 *.so
 
+ipa_file
+ipa_unziped
+
+.DS_Store
+
 # Distribution / packaging
 .Python
 build/
