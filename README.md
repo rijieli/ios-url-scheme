@@ -7,6 +7,15 @@ $ pip3 install -r requirements.txt
 ```
 
 ## 使用方式
+### 通过 iMazing 或者老版 iTunes 下载 IPA
+将 IPA 文件放在 ipa_file 目录下，然后运行
+```
+$ python3 parse_ipa.py
+App Name: 网易公开课 OpenCourse
+URL Schemes: ['neteaseVopen', 'wx55ad9609a9e87513', 'yxffe9005aacb94b60892f4918160ef12c', 'tencent100857527', 'wb1023607621']
+```
+
+### 通过爱思下载 IPA 文件
 首先通过下方链接搜索应用名称
 
 ```

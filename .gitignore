@@ -9,6 +9,8 @@ __pycache__/
 ipa_file
 ipa_unziped
 
+validate.py
+
 .DS_Store
 
 # Distribution / packaging
