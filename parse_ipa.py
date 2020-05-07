@@ -10,7 +10,7 @@ def unzip(filename):
 
     ziped_file = IPA_DOWNLOAD_DIR + filename
 
-    if "\.ipa" in filename:
+    if not ".ipa" in filename:
         ziped_file += ".ipa"
     
     try:
@@ -65,9 +65,10 @@ def find_url_scheme(filename):
 def parse_downloaded_file():
     file_name_list = os.listdir(IPA_DOWNLOAD_DIR)
     for filename in file_name_list:
-        if "ipa" in filename:
+        if ".ipa" in filename:
             unzip(filename)
             find_url_scheme(filename)
 
 
-parse_downloaded_file()
+if __name__ == '__main__':
+    parse_downloaded_file()
