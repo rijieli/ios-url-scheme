@@ -3,6 +3,7 @@
 import requests
 import shutil
 import json
+import os
 from lxml.etree import HTML
 from base64 import b64decode
 from sys import argv
@@ -43,6 +44,12 @@ def download_i4_ipa(url):
     return title
 
 def main():
+
+    if not os.path.exists("ipa_file"):
+        os.mkdir("ipa_file")
+    if not os.path.exists("ipa_unziped"):
+        os.mkdir("ipa_unziped")
+
     apps = argv[1:]
     for app in apps:
         ipa_filename = download_i4_ipa(app)
