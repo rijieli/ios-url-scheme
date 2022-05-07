@@ -70,6 +70,12 @@ App Name: QQ QQ
 URL Schemes: ['mqqMsg2Tim', 'mqqtribe', 'mqqflyticket', 'mqqapi', 'mqqqzoneapi', 'mqqreservedapi', 'mqq', 'mqqopensdkapi', 'mqqOpensdkSSoLogin', 'wtloginmqq', 'wtloginmqq2', 'wtloginmqq3', 'mqqapiwallet', 'mqqopensdkapiV2', 'mqqwpa', 'mqqopensdkapiV3', 'wxf0a80d0ac2e82aa7', 'mqqwallet', 'mqqgamebindinggroup', 'mqqopensdkfriend', 'mqqvoipivr', 'mqqopensdkdataline', 'mqqopensdkgrouptribeshare', 'mqqwpaopenid', 'mqqconnect', 'mqqwalletv2', 'prefs', 'mqqopensdkapiV4', 'mqqconferenceflyticket', 'qqstory', 'kandianugc', 'wxeaef4303c20f3dea', 'wx820b0a1e23f2c841', 'wxcb89b8fc34e4e304', 'mqqv765', 'wx34b037fdb0f655ee', 'mqqopensdkavatar', 'mqqopensdkminiapp', 'mqqopensdklaunchminiapp', 'mqqopensdkproxylogin', 'mqqthirdappgroup', 'mqqavshare', 'mqqnewfriend', 'wx76a769350165bcff', 'mqqwebview', 'wx1d0f5457c7556472', 'wb94065651']
 ```
 
+### 5. AutoIPADownload
+
+https://github.com/NyaMisty/AutoIPADownload
+
+(WIP)
+
 ## References
 
 [https://github.com/chinsyo/i4download](https://github.com/chinsyo/i4download)
