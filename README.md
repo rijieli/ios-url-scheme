@@ -47,7 +47,7 @@ PlayCover is an M1 Mac sideload tool，they provide some IPA。
 
 PlayCover IPA: [ipa.playcover.workers.dev](https://ipa.playcover.workers.dev/0:/)
 
-### 4. i4.cn
+### 4. i4.cn (not available)
 
 First use link below search app name(replace keyword with name）：
 
