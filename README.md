@@ -28,6 +28,8 @@ $ python3 get.py -h
 
 `get.py` fails immediately on non-macOS systems. If `ipatool` is missing, it prompts to install Homebrew (when needed) and then `ipatool`. After App Store login, search for an app, select a result, and the IPA is saved to `apps/` and scanned for URL Schemes.
 
+Supports only free or already paid apps.
+
 To parse IPA files you already have, put them in `apps/` and run:
 
 ```

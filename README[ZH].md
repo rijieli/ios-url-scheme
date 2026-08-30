@@ -28,6 +28,8 @@ $ python3 get.py -h
 
 `get.py` 在非 macOS 系统上会立即退出。若未安装 `ipatool`，会提示安装 Homebrew（如需要）再安装 `ipatool`。登录 App Store 后搜索应用、选择结果，IPA 会保存到 `apps/` 并解析 URL Scheme。
 
+仅支持免费应用或已购买的付费应用。
+
 若已有 IPA 文件，将其放入 `apps/` 后运行：
 
 ```

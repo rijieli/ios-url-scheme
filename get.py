@@ -8,6 +8,7 @@ import shutil
 import subprocess
 import sys
 import threading
+import urllib.request
 
 from config import IPA_DOWNLOAD_DIR
 
@@ -111,14 +112,39 @@ def obfuscate(text):
     return mask(local) + sep + mask(domain)
 
 
+def fmt_size(raw):
+    try:
+        n = float(raw)
+    except (TypeError, ValueError):
+        return "—"
+    units = ("B", "KB", "MB", "GB", "TB")
+    index = 0
+    while n >= 1024 and index < len(units) - 1:
+        n /= 1024
+        index += 1
+    return "%d B" % n if index == 0 else "%.1f %s" % (n, units[index])
+
+
 def search_and_download(term, limit):
     with Spinner("Searching the App Store…"):
         payload = ipatool_json("search", term, "-l", str(limit))
-    apps = payload.get("apps") or []
+        apps = payload.get("apps") or []
+        sizes = {}
+        ids = [str(app["id"]) for app in apps if app.get("id")]
+        if ids:
+            try:
+                with urllib.request.urlopen(
+                    "https://itunes.apple.com/lookup?id=" + ",".join(ids),
+                    timeout=10,
+                ) as resp:
+                    for item in json.loads(resp.read().decode()).get("results") or []:
+                        sizes[item.get("trackId")] = item.get("fileSizeBytes")
+            except OSError:
+                pass
     if not apps:
         print(color("No results for ", 33) + color(term, 1, 33))
         return
-    headers = ("#", "Name", "Bundle ID", "Version", "Price")
+    headers = ("#", "Name", "Bundle ID", "Version", "Size", "Price")
     rows = []
     for index, app in enumerate(apps, 1):
         price = app.get("price") or 0
@@ -128,29 +154,35 @@ def search_and_download(term, limit):
                 app.get("name") or "",
                 app.get("bundleID") or "",
                 app.get("version") or "",
+                fmt_size(sizes.get(app.get("id"))),
                 "Free" if price == 0 else "$%s" % price,
             )
         )
+    count = len(headers)
     widths = [
         max(len(headers[column]), max(len(row[column]) for row in rows))
-        for column in range(5)
+        for column in range(count)
     ]
-    columns = shutil.get_terminal_size((80, 24)).columns
-    overflow = sum(widths) + 8 - columns
-    if overflow > 0:
-        widths[1] = max(8, widths[1] - overflow)
+    overflow = sum(widths) + 2 * (count - 1) - shutil.get_terminal_size((80, 24)).columns
+    for shrink in (2, 1):
+        if overflow <= 0:
+            break
+        take = min(overflow, max(0, widths[shrink] - 8))
+        widths[shrink] -= take
+        overflow -= take
 
-    def cell(text, width):
-        if len(text) <= width:
-            return text.ljust(width)
-        if width <= 1:
-            return text[:width]
-        return (text[: width - 1] + "…").ljust(width)
+    def cell(text, width, right=False):
+        if len(text) > width:
+            text = text[:width] if width <= 1 else text[: width - 1] + "…"
+        return text.rjust(width) if right else text.ljust(width)
 
     print()
     print(
         color(
-            "  ".join(headers[i].ljust(widths[i]) for i in range(5)),
+            "  ".join(
+                cell(headers[i], widths[i], right=i in (0, 3, 4, 5))
+                for i in range(count)
+            ),
             2,
         )
     )
@@ -158,11 +190,15 @@ def search_and_download(term, limit):
         print(
             "  ".join(
                 (
-                    color(cell(row[0], widths[0]), 1, 36),
+                    color(cell(row[0], widths[0], right=True), 1, 36),
                     color(cell(row[1], widths[1]), 1),
                     color(cell(row[2], widths[2]), 2),
-                    cell(row[3], widths[3]),
-                    color(cell(row[4], widths[4]), 32 if row[4] == "Free" else 33),
+                    cell(row[3], widths[3], right=True),
+                    color(cell(row[4], widths[4], right=True), 2),
+                    color(
+                        cell(row[5], widths[5], right=True),
+                        32 if row[5] == "Free" else 33,
+                    ),
                 )
             )
         )
