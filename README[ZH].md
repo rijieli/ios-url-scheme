@@ -4,7 +4,7 @@
 
 ![Demo](screen.gif)
 
-该脚本用来解析 iOS IPA 文件中的 URL Scheme，可以用在快捷指令自动化操作。在使用该脚本前，优先推荐在[捷径社区](https://sharecuts.cn/apps)直接搜索应用名称，避免重复劳动，有未收录的 URL Scheme 也欢迎联系社区管理员进行提交。
+该脚本用来解析 iOS IPA 文件中的 URL Scheme，可以用在快捷指令自动化操作。
 
 ## 环境要求
 

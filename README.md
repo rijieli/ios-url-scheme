@@ -4,7 +4,7 @@ Language: **en-US** / [zh-CN](https://github.com/rijieli/ios-url-scheme/blob/mas
 
 ![Demo](screen.gif)
 
-This script is used to parse the URL Scheme in iOS IPA files and can be used for iOS Shortcuts automation operations. Before using this script, it is recommended to search the application name directly in [Sharecuts](https://sharecuts.cn/apps) to avoid duplication of work, and you are welcome to contact the community administrator to submit any URL Scheme that is not included.
+This script is used to parse the URL Scheme in iOS IPA files and can be used for iOS Shortcuts automation operations.
 
 ## Requirements
 
