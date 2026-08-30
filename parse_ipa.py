@@ -1,74 +1,47 @@
-import zipfile, os, sys
-from config import IPA_UNZIP_DIR
+import os
+import plistlib
+import zipfile
+
 from config import IPA_DOWNLOAD_DIR
 
-import biplist
-
-## 解压缩文件
-
-def unzip(filename):
-
-    ziped_file = IPA_DOWNLOAD_DIR + filename
-
-    if not ".ipa" in filename:
-        ziped_file += ".ipa"
-    
-    try:
-        zf = zipfile.ZipFile(ziped_file)
-        zf.extractall(path=IPA_UNZIP_DIR + filename)
-        zf.close()
-    except RuntimeError as e:
-        print(e)
-    except zipfile.BadZipFile as bzfe:
-        print("!!!! 解压失败 BadZipFile 错误: " + str(filename))
-        
-    return filename
-
-# 寻找 urlscheme
 
 def find_url_scheme(filename):
-
+    path = IPA_DOWNLOAD_DIR + filename
+    if ".ipa" not in filename:
+        path += ".ipa"
     try:
-        plist_path = IPA_UNZIP_DIR+filename+"/Payload/"
-        app_file_name = os.listdir(plist_path)[0]
-        plist_path += app_file_name
-        plist_path += "/info.plist"
-        plist_file = biplist.readPlist(plist_path);
-
+        with zipfile.ZipFile(path) as zf:
+            plist_name = next(
+                name
+                for name in zf.namelist()
+                if name.lower().endswith("/info.plist")
+                and name.split("/")[0] == "Payload"
+                and name.split("/")[1].endswith(".app")
+            )
+            plist_file = plistlib.load(zf.open(plist_name))
         result = []
-
         display_name = ""
-
         if "CFBundleDisplayName" in plist_file:
             display_name += plist_file["CFBundleDisplayName"] + " "
         if "CFBundleName" in plist_file:
             display_name += plist_file["CFBundleName"]
-
-        print("App Name: " + display_name)
-
         if "CFBundleURLTypes" in plist_file:
-            urls = plist_file["CFBundleURLTypes"]
-            for urlscheme in urls:
+            for urlscheme in plist_file["CFBundleURLTypes"]:
                 if "CFBundleURLSchemes" in urlscheme:
                     result += urlscheme["CFBundleURLSchemes"]
-        else:
-            print("「" + filename + "」可能未配置 URL Scheme，请手动检查 plist 文件: " )
-            print(plist_path)
-        
-        print("URL Schemes: " + str(result))
-    except biplist.InvalidPlistException as e:
+        return display_name.strip(), result
+    except (StopIteration, zipfile.BadZipFile, plistlib.InvalidFileException, FileNotFoundError) as e:
         print(e)
-    except FileNotFoundError as nfe:
-        print(nfe)
-    return plist_path
+    return "", []
+
 
 def parse_downloaded_file():
-    file_name_list = os.listdir(IPA_DOWNLOAD_DIR)
-    for filename in file_name_list:
+    for filename in os.listdir(IPA_DOWNLOAD_DIR):
         if ".ipa" in filename:
-            unzip(filename)
-            find_url_scheme(filename)
+            display_name, result = find_url_scheme(filename)
+            print("App Name: " + display_name)
+            print("URL Schemes: " + str(result))
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     parse_downloaded_file()

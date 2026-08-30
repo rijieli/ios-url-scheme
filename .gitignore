@@ -6,10 +6,8 @@ __pycache__/
 # C extensions
 *.so
 
-ipa_file
-ipa_unziped
-
-validate.py
+apps/*
+!apps/.gitkeep
 
 .DS_Store
 
